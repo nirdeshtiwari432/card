@@ -6,24 +6,32 @@
 <title>विवाह निमंत्रण</title>
 
 <style>
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 body{
   margin:0;
   font-family:"Mangal","Noto Serif Devanagari",serif;
   background:linear-gradient(135deg,#fff1c1,#f3c36b);
   min-height:100vh;
-  overflow:hidden;
+  overflow-y:auto;              /* ✅ enable scrolling */
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;       /* ✅ allow content to grow */
+  padding:20px 0;
 }
 
 /* petals */
 .petal{
-  position:absolute;
+  position:fixed;
   width:10px;height:10px;
   background:rgba(255,105,180,.6);
   border-radius:50%;
   animation:fall linear infinite;
+  z-index:1;
 }
 @keyframes fall{
   0%{transform:translateY(-10vh);opacity:1;}
@@ -32,11 +40,12 @@ body{
 
 /* sparkles */
 .sparkle{
-  position:absolute;
+  position:fixed;
   width:6px;height:6px;
   background:gold;
   border-radius:50%;
   animation:twinkle 2s infinite alternate;
+  z-index:1;
 }
 @keyframes twinkle{
   from{opacity:.2;}
@@ -48,7 +57,7 @@ body{
   background:#fffdf6;
   width:92%;
   max-width:540px;
-  padding:28px 24px;
+  padding:28px 20px;
   border-radius:20px;
   border:4px double transparent;
   background-image:
@@ -68,7 +77,7 @@ body{
 
 h1{
   color:#8b0000;
-  font-size:30px;
+  font-size:28px;
   text-shadow:0 0 14px gold;
 }
 
@@ -79,11 +88,10 @@ h1{
   margin:10px 0;
 }
 .deities img{
-  width:80px;
+  width:75px;
   animation:floatDeity 3s ease-in-out infinite alternate;
 }
 @keyframes floatDeity{
-  from{transform:translateY(0);}
   to{transform:translateY(-10px);}
 }
 
@@ -95,78 +103,57 @@ h1{
 }
 
 .names{
-  font-size:24px;
+  font-size:22px;
   font-weight:bold;
   color:#2f4f4f;
   margin:18px 0;
 }
 
 .events{
-  font-size:17px;
+  font-size:16px;
   line-height:1.9;
 }
-.events b:hover{
-  color:#8b0000;
-  text-shadow:0 0 6px gold;
-}
 
-/* paan supari */
-.paan{
-  display:flex;
-  justify-content:center;
-  margin-top:15px;
-}
+/* paan */
 .paan img{
   width:55px;
   animation:pulse 2s infinite;
 }
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.12);}
-  100%{transform:scale(1);}
-}
 
-/* music icons */
+/* icons */
 .music-icons{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-top:10px;
   font-size:28px;
+  margin-top:10px;
   animation:shake 1.5s infinite;
   cursor:pointer;
-}
-@keyframes shake{
-  0%{transform:rotate(0deg);}
-  25%{transform:rotate(2deg);}
-  50%{transform:rotate(0deg);}
-  75%{transform:rotate(-2deg);}
-  100%{transform:rotate(0deg);}
 }
 
 /* diya */
 .diya{
-  margin-top:10px;
-  font-size:28px;
+  font-size:26px;
   animation:flame 1s infinite alternate;
 }
-@keyframes flame{
-  from{text-shadow:0 0 6px orange;}
-  to{text-shadow:0 0 16px gold;}
-}
 
+/* footer */
 .footer{
   margin-top:14px;
   font-size:15px;
-  color:#555;
 }
 
 /* countdown */
 #countdown{
   margin-top:10px;
   font-size:16px;
-  color:#8b0000;
   font-weight:bold;
+  color:#8b0000;
+}
+
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 480px){
+  h1{font-size:24px;}
+  .names{font-size:20px;}
+  .events{font-size:15px;}
+  .deities img{width:65px;}
 }
 </style>
 </head>
@@ -180,7 +167,6 @@ for(let i=0;i<20;i++){
   p.className="petal";
   p.style.left=Math.random()*100+"vw";
   p.style.animationDuration=(6+Math.random()*6)+"s";
-  p.style.animationDelay=Math.random()*5+"s";
   document.body.appendChild(p);
 }
 
@@ -206,7 +192,6 @@ for(let i=0;i<15;i++){
   </div>
 
   <h1>॥ श्री गणेशाय नमः ॥</h1>
-
   <div class="diya">🪔</div>
 
   <div class="divider"></div>
@@ -242,21 +227,18 @@ for(let i=0;i<15;i++){
 </div>
 
 <script>
-/* music toggle */
 function toggleMusic(){
   const m=document.getElementById("music");
   m.paused ? m.play() : m.pause();
 }
 
-/* countdown */
-const target=new Date("May 2, 2026 00:00:00").getTime();
+const target=new Date("May 2, 2026").getTime();
 setInterval(()=>{
-  const now=new Date().getTime();
+  const now=Date.now();
   const d=target-now;
   if(d>0){
-    const days=Math.floor(d/(1000*60*60*24));
-    document.getElementById("countdown").innerText=
-      "💍 विवाह में शेष: "+days+" दिन";
+    document.getElementById("countdown").innerText =
+      "💍 विवाह में शेष: "+Math.floor(d/86400000)+" दिन";
   }
 },1000);
 </script>
