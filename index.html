@@ -17,14 +17,14 @@ body{
   font-family:"Mangal","Noto Serif Devanagari",serif;
   background:linear-gradient(135deg,#fff1c1,#f3c36b);
   min-height:100vh;
-  overflow-y:auto;              /* ✅ enable scrolling */
+  overflow-y:auto;
   display:flex;
   justify-content:center;
-  align-items:flex-start;       /* ✅ allow content to grow */
+  align-items:flex-start;
   padding:20px 0;
 }
 
-/* petals */
+/* falling petals */
 .petal{
   position:fixed;
   width:10px;height:10px;
@@ -119,13 +119,20 @@ h1{
   width:55px;
   animation:pulse 2s infinite;
 }
+@keyframes pulse{
+  50%{transform:scale(1.1);}
+}
 
-/* icons */
+/* music icon */
 .music-icons{
-  font-size:28px;
-  margin-top:10px;
+  font-size:26px;
+  margin-top:12px;
   animation:shake 1.5s infinite;
   cursor:pointer;
+}
+@keyframes shake{
+  25%{transform:rotate(2deg);}
+  75%{transform:rotate(-2deg);}
 }
 
 /* diya */
@@ -133,14 +140,17 @@ h1{
   font-size:26px;
   animation:flame 1s infinite alternate;
 }
+@keyframes flame{
+  from{text-shadow:0 0 6px orange;}
+  to{text-shadow:0 0 16px gold;}
+}
 
-/* footer */
 .footer{
   margin-top:14px;
   font-size:15px;
+  color:#555;
 }
 
-/* countdown */
 #countdown{
   margin-top:10px;
   font-size:16px;
@@ -148,8 +158,8 @@ h1{
   color:#8b0000;
 }
 
-/* 📱 MOBILE OPTIMIZATION */
-@media (max-width: 480px){
+/* mobile */
+@media (max-width:480px){
   h1{font-size:24px;}
   .names{font-size:20px;}
   .events{font-size:15px;}
@@ -160,8 +170,8 @@ h1{
 
 <body>
 
+<!-- 🌸 Effects -->
 <script>
-/* petals */
 for(let i=0;i<20;i++){
   const p=document.createElement("div");
   p.className="petal";
@@ -169,8 +179,6 @@ for(let i=0;i<20;i++){
   p.style.animationDuration=(6+Math.random()*6)+"s";
   document.body.appendChild(p);
 }
-
-/* sparkles */
 for(let i=0;i<15;i++){
   const s=document.createElement("div");
   s.className="sparkle";
@@ -180,8 +188,9 @@ for(let i=0;i<15;i++){
 }
 </script>
 
-<audio id="music" autoplay loop>
-  <source src="" type="audio/mpeg">
+<!-- 🔊 Ganesh Mantra -->
+<audio id="music" loop preload="auto">
+  <source src="assets/audio/vakratunda.mp3" type="audio/mpeg">
 </audio>
 
 <div class="card">
@@ -217,8 +226,7 @@ for(let i=0;i<15;i++){
     <img src="https://c8.alamy.com/comp/2B73TYN/hindu-puja-with-betel-leaf-supari-janeu-almond-dates-turmeric-dried-coconut-and-jaggery-with-1-rupee-coin-important-item-in-vedic-rituals-sele-2B73TYN.jpg">
   </div>
 
-  <div class="music-icons" onclick="toggleMusic()">🎺 🎶 🥁</div>
-
+  
   <div class="footer">
     सपरिवार पधार कर<br>
     वर-वधू को आशीर्वाद प्रदान करें
@@ -227,17 +235,27 @@ for(let i=0;i<15;i++){
 </div>
 
 <script>
-function toggleMusic(){
-  const m=document.getElementById("music");
-  m.paused ? m.play() : m.pause();
+let started = false;
+
+function startMusic() {
+  if (!started) {
+    const music = document.getElementById("music");
+    music.play().catch(() => {});
+    started = true;
+  }
 }
 
+/* Desktop + Mobile support */
+document.addEventListener("click", startMusic);
+document.addEventListener("touchstart", startMusic);
+
+
+/* countdown */
 const target=new Date("May 2, 2026").getTime();
 setInterval(()=>{
-  const now=Date.now();
-  const d=target-now;
+  const d=target-Date.now();
   if(d>0){
-    document.getElementById("countdown").innerText =
+    document.getElementById("countdown").innerText=
       "💍 विवाह में शेष: "+Math.floor(d/86400000)+" दिन";
   }
 },1000);
